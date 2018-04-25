@@ -21,7 +21,7 @@ function scandir_by_date( $dir ) {
 
 	$files = array();
 	foreach ( scandir( $dir ) as $file ) {
-		if ( in_array( $file, $ignored ) ) { continue;
+		if ( in_array( $file, $ignored ) || is_dir($dir . '/' . $file) ) { continue;
 		}
 		$files[ $file ] = filemtime( $dir . '/' . $file );
 	}
@@ -50,7 +50,7 @@ function group_exports( $dir = null ) {
 
 	$files = array();
 	foreach ( scandir( $dir ) as $file ) {
-		if ( in_array( $file, $ignored ) ) { continue;
+		if ( in_array( $file, $ignored ) || is_dir($dir . $file) ) { continue;
 		}
 		$files[ $file ] = filemtime( $dir . $file );
 	}
@@ -185,12 +185,13 @@ function latest_exports() {
 	// group by extension, sort by date newest first
 	foreach ( \Pressbooks\Utility\scandir_by_date( $dir ) as $file ) {
 		// only interested in the part of filename starting with the timestamp
-		preg_match( '/-\d{10,11}(.*)/', $file, $matches );
+		if(preg_match( '/-\d{10,11}(.*)/', $file, $matches )){
 
-		// grab the first captured parenthisized subpattern
-		$ext = $matches[1];
+			// grab the first captured parenthisized subpattern
+			$ext = $matches[1];
 
-		$files[ $ext ][] = $file;
+			$files[ $ext ][] = $file;
+		}
 	}
 
 	// get only one of the latest of each type

@@ -189,6 +189,7 @@ $formats = apply_filters( 'pb_export_formats', array(
 	);
 } ?>
 		</fieldset>
+		<?php do_action('pb_export_form_end' );?>
 	</form>
 	<div class="clear"></div>
 	<h3><?php _e( 'Your Theme Options', 'pressbooks' ); ?></h3>
@@ -208,6 +209,7 @@ $formats = apply_filters( 'pb_export_formats', array(
 <div class="export-control">
 	<p><input id="pb-export-button" type="button" class="button button-hero button-primary generate" value="<?php esc_attr_e( 'Export Your Book', 'pressbooks' ); ?>" /></p>
 	<p id="loader"><img src="<?php echo PB_PLUGIN_URL; ?>assets/dist/images/loader.gif" alt="Exporting..." width="128" height="15" /></p>
+	<?php if ( apply_filters( 'pb_export_show_files', true ) ) : ?>
 	<?php
 	$c = 0; // start counter
 	$files = \Pressbooks\Utility\group_exports();
@@ -284,6 +286,7 @@ foreach ( $exports as $file ) {
 		<input type="hidden" name="delete_all_exports" value="true" />
 		<button class="button" type="submit" name="submit" src="" value="Delete All Exports" onclick="if ( !confirm('<?php esc_attr_e( 'Are you sure you want to delete ALL your current exports?', 'pressbooks' ); ?>' ) ) { return false }"><?php _e( 'Delete All Exports', 'pressbooks' ); ?></button>
 	</form>
+	<?php endif; ?>
 	<?php endif; ?>
 </div> <!-- .export-control -->
 
